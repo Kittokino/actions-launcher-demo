@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Actions Launcher — Service Console Demo</title>
+  <link rel="stylesheet" href="https://unpkg.com/@salesforce-ux/design-system@2.24.3/assets/styles/salesforce-lightning-design-system.min.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Global header -->
+  <header class="app-header">
+    <div class="app-header__brand">
+      <span class="app-header__logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M2 5 Q4 1.8 6 5 Q8 8.2 10 5 Q12 1.8 14 5 Q16 8.2 18 5 Q20 1.8 22 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 12 Q4 8.8 6 12 Q8 15.2 10 12 Q12 8.8 14 12 Q16 15.2 18 12 Q20 8.8 22 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 19 Q4 15.8 6 19 Q8 22.2 10 19 Q12 15.8 14 19 Q16 22.2 18 19 Q20 15.8 22 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span class="app-header__name">Infiwave Wireless</span>
+    </div>
+    <div class="app-header__search-hint">Actions Launcher demo — press <kbd>Ctrl</kbd>+<kbd>K</kbd> to search actions</div>
+    <div class="app-header__user">
+      <div class="app-header__actions">
+        <button class="app-header__icon-btn" data-toast="Help" title="Help" aria-label="Help">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+        </button>
+        <button class="app-header__icon-btn" data-toast="Settings" title="Settings" aria-label="Settings">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+        </button>
+        <button class="app-header__icon-btn" data-toast="Notifications" title="Notifications" aria-label="Notifications">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+        </button>
+      </div>
+      <span class="app-header__avatar">KK</span>
+      <span class="app-header__user-name">Kitto Kino · Service Rep</span>
+    </div>
+  </header>
+
+  <!-- Console navigation -->
+  <nav class="console-nav" aria-label="Console navigation">
+    <div class="console-nav__app">
+      <button class="console-nav__app-icon" type="button" title="App Launcher" aria-label="App Launcher">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="1.5"/><circle cx="12" cy="6" r="1.5"/><circle cx="18" cy="6" r="1.5"/><circle cx="6" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="18" cy="12" r="1.5"/><circle cx="6" cy="18" r="1.5"/><circle cx="12" cy="18" r="1.5"/><circle cx="18" cy="18" r="1.5"/></svg>
+      </button>
+      <span class="console-nav__app-name">Service Console</span>
+    </div>
+    <div class="console-nav__tabs" role="tablist">
+      <button class="console-nav__tab" data-nav="customer" role="tab">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <span>Sari Tsering</span>
+      </button>
+      <button class="console-nav__tab" data-nav="case" role="tab">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+        <span class="console-nav__tab-label"><span>00042317</span><small class="console-nav__tab-sub"></small></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Workspace: console views + live chat panel -->
+  <main class="workspace">
+    <div class="workspace__views">
+      <section class="view" id="view-customer" data-view="customer">
+        <div class="subtab-bar" data-view="customer" role="tablist"></div>
+        <div class="subtab-contents" data-view="customer"></div>
+      </section>
+      <section class="view" id="view-case" data-view="case" hidden>
+        <div class="subtab-bar" data-view="case" role="tablist"></div>
+        <div class="subtab-contents" data-view="case"></div>
+      </section>
+    </div>
+
+    <aside class="chat-panel" aria-label="Live chat">
+      <div class="chat-panel__header">
+        <span class="chat-panel__status-dot" aria-hidden="true"></span>
+        <div>
+          <div class="chat-panel__title">Live Chat — Sari Tsering</div>
+          <div class="chat-panel__subtitle">Web chat · started 2:14 PM</div>
+        </div>
+      </div>
+      <div class="chat-panel__messages" id="chat-messages" aria-live="polite"></div>
+      <div class="chat-panel__controls">
+        <button class="slds-button slds-button_brand chat-next" id="chat-next">Next message</button>
+        <button class="slds-button slds-button_neutral" id="chat-autoplay">▶ Auto-play</button>
+        <button class="slds-button slds-button_neutral" id="chat-restart" title="Restart conversation">↺</button>
+      </div>
+      <div class="chat-panel__composer">
+        <input type="text" placeholder="Type a reply… (demo only)" disabled />
+        <button class="chat-panel__send" disabled aria-label="Send">
+          <svg viewBox="0 0 24 24"><path d="M2.01 21 23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Persistent utility bar (footer) -->
+  <footer class="utility-bar" aria-label="Utility bar">
+    <button class="utility-item utility-item--presence is-active" data-toast="Omni-Channel: Online — ready for new work">
+      <span class="utility-presence" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+      </span>
+      <span>Omni-Channel (Online)</span>
+    </button>
+    <button class="utility-item" data-toast="Opening History">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 5h-2v6l5.25 3.15 1-1.65-4.25-2.5V7z"/></svg>
+      <span>History</span>
+    </button>
+    <button class="utility-item" data-toast="Opening Notes">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v2H4V5zm0 4h10v2H4V9zm0 4h16v2H4v-2zm0 4h10v2H4v-2z"/></svg>
+      <span>Notes</span>
+    </button>
+  </footer>
+
+  <div id="toast-region" aria-live="assertive"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
