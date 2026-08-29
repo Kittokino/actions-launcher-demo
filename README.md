@@ -1,12 +1,12 @@
 # Actions Launcher
 
-An AI-assisted way for a customer-service rep to find and launch the right workflow (action) while a conversation is happening.
+An AI-assisted way for a customer-service rep to find and launch the right workflow (action) while a conversation is ongoing with the customer.
 
 🔗 **Live demo:** https://kittokino.github.io/actions-launcher-demo/
 
 ## Why this exploration
 
-On a live call or chat, a rep has to find *the right thing to do* across dozens of workflows they don't have memorized — and menu-hunting mid-conversation is slow. This prototype explores a fix: a fast, typo- and synonym-tolerant **search**, rep-managed **pinned actions**, and an **AI that listens to the conversation** and suggests the matching actions on demand. It's a front-end concept (styled as a Salesforce-style console for a fictional telecom) built to pressure-test the idea and the UX.
+On a live call or chat, a rep has to find *the right thing to do* across dozens of workflows they don't have memorized - and menu-hunting mid-conversation is slow. This prototype explores a fix: a fast, typo- and synonym-tolerant **search**, rep-managed **pinned actions**, and an **AI that listens to the conversation** and suggests the matching actions on demand. It's a front-end concept (styled as a Salesforce-style console for a fictional telecom company) built to pressure-test the idea and the UX.
 
 ## What to play with?
 
@@ -19,7 +19,7 @@ On a live call or chat, a rep has to find *the right thing to do* across dozens 
 
 - Plain HTML/CSS/JS + [SLDS](https://www.lightningdesignsystem.com/), no backend — everything (search, AI, chat) is mocked client-side.
 - All data is fictional. Independent concept prototype — **not affiliated with Salesforce**; SLDS/"Einstein" marks belong to Salesforce, Inc.
-- Best viewed on a **desktop** screen.
+- Best viewed on a **desktop** screen, preferably on a **1980x1080 resolution**.
 
 ---
 
