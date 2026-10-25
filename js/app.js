@@ -234,7 +234,7 @@
           '<div class="detail-card__body">' +
             '<div class="launcher-search">' +
               '<span class="launcher-search__icon">' + ICONS.search + "</span>" +
-              '<input type="text" placeholder="Search actions  (try “money back”)" aria-label="Search actions" autocomplete="off" />' +
+              '<input type="text" placeholder="Search actions" aria-label="Search actions" autocomplete="off" />' +
               '<div class="launcher-dropdown" hidden></div>' +
             "</div>" +
             '<div class="pinned-strip"></div>' +
@@ -252,6 +252,8 @@
       this.input.addEventListener("click", () => this.open());
       this.input.addEventListener("input", () => { this.activeIndex = -1; this.open(); });
       this.input.addEventListener("keydown", (e) => this.onKeydown(e));
+      // Close the dropdown as soon as the field loses focus (results/chips keep focus via mousedown preventDefault).
+      this.input.addEventListener("blur", () => this.close());
       this.toggleInput.addEventListener("change", (e) => setEinsteinEnabled(e.target.checked));
       document.addEventListener("mousedown", (e) => {
         if (!container.contains(e.target)) this.close();
@@ -1179,16 +1181,17 @@
   document.addEventListener("keydown", (e) => {
     const el = document.activeElement;
     const inField = !!el && (/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName) || el.isContentEditable);
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+    if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === "k" || e.key.toLowerCase() === "h")) {
+      // Ctrl/Cmd+K and Ctrl/Cmd+H both focus the search field (preventDefault also suppresses Ctrl+H history).
       e.preventDefault();
       focusActiveLauncher();
     } else if (e.key === "/" && !inField) {
       e.preventDefault();
       focusActiveLauncher();
-    } else if ((e.key === "h" || e.key === "H") && (e.ctrlKey || e.shiftKey) && !e.metaKey && !e.altKey) {
-      // Presenter cue: Ctrl+H or Shift+H toggles a pulsing ring on the Actions Launcher.
+    } else if (e.shiftKey && !e.ctrlKey && !e.metaKey && !e.altKey && (e.key === "h" || e.key === "H")) {
+      // Shift+H toggles the presenter spotlight ring on the Actions Launcher.
       if (inField) return;
-      e.preventDefault(); // suppress Ctrl+H (browser history)
+      e.preventDefault();
       document.querySelectorAll(".launcher-card").forEach((c) => c.classList.toggle("highlight-pulse"));
     } else if (e.key === "Escape") {
       document.querySelectorAll(".launcher-card.highlight-pulse").forEach((c) => c.classList.remove("highlight-pulse"));

@@ -53,7 +53,7 @@ kbd {
 }
 .app-header__brand { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1rem; }
 .app-header__logo svg { width: 22px; height: 22px; color: #9e4c9c; fill: none; }
-.app-header__search-hint { color: var(--text-weak); font-size: 0.8rem; }
+.app-header__search-hint { display: none; color: var(--text-weak); font-size: 0.8rem; }
 .app-header__user { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--text-weak); }
 .app-header__actions { display: inline-flex; align-items: center; gap: 0.15rem; }
 .app-header__icon-btn {
