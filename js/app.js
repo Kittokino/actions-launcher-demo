@@ -772,9 +772,9 @@
     const searchInput = backdrop.querySelector(".duallist__search input");
     const hint = backdrop.querySelector(".modal__hint");
 
-    const badge = (a) => '<span class="cat-badge" style="background:' + CATEGORIES[a.category].color + '">' + CATEGORIES[a.category].label + "</span>";
-    const rowMain = (a) => '<span class="duallist__ico" style="color:' + CATEGORIES[a.category].color + '">' + ICONS[a.category] + "</span>" +
-      '<span class="duallist__row-main"><span class="duallist__name">' + escapeHtml(a.name) + "</span>" + badge(a) + "</span>";
+    // Soft tinted pill, single gray label; no category icon (keeps the editor calm and matches the overflow menu).
+    const badge = (a) => '<span class="cat-badge" style="background:' + CATEGORIES[a.category].tint + '">' + CATEGORIES[a.category].label + "</span>";
+    const rowMain = (a) => '<span class="duallist__row-main"><span class="duallist__name">' + escapeHtml(a.name) + "</span>" + badge(a) + "</span>";
 
     function renderAvail() {
       const f = filter.trim().toLowerCase();

@@ -1,10 +1,10 @@
 /* Demo data: telecom action catalog, customer/case records, chat script, staged AI suggestions. */
 
 const CATEGORIES = {
-  billing: { id: "billing", label: "Billing", color: "#3ba755" },
-  plans:   { id: "plans",   label: "Plans",   color: "#0176d3" },
-  devices: { id: "devices", label: "Devices", color: "#9050e9" },
-  network: { id: "network", label: "Network", color: "#dd7a01" },
+  billing: { id: "billing", label: "Billing", color: "#3ba755", tint: "#e7f4ea" },
+  plans:   { id: "plans",   label: "Plans",   color: "#0176d3", tint: "#e4f0fb" },
+  devices: { id: "devices", label: "Devices", color: "#9050e9", tint: "#f0e9fc" },
+  network: { id: "network", label: "Network", color: "#dd7a01", tint: "#fbeedb" },
 };
 
 /* Inline SVG icons (24x24, fill: currentColor) */

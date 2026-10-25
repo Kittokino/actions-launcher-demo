@@ -511,9 +511,9 @@ kbd {
   flex-direction: column;
   align-items: center;
   gap: 0.25rem;
-  padding: 1.5rem 1rem 1.75rem;
+  padding: 0.75rem 1rem 1rem;
 }
-.launcher-empty__art { width: 160px; height: auto; margin-bottom: 0.5rem; }
+.launcher-empty__art { width: 210px; height: auto; margin-bottom: 0.25rem; }
 .launcher-empty__title { font-size: 0.95rem; font-weight: 600; color: var(--text); }
 .launcher-empty__text { max-width: 320px; line-height: 1.5; color: var(--text-weak); }
 
@@ -705,12 +705,10 @@ kbd {
 .duallist__row:hover:not(:disabled) { background: #f3f8fe; }
 .duallist__row:disabled { opacity: 0.45; cursor: not-allowed; }
 .duallist__row--sel, .duallist__row--sel:hover { cursor: default; background: #fff; }
-.duallist__ico { display: inline-flex; flex: none; }
-.duallist__ico svg { width: 16px; height: 16px; }
 .duallist__row-main { flex: 1; min-width: 0; display: flex; align-items: center; gap: 0.4rem; }
 .duallist__name { font-size: 0.82rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cat-badge {
-  font-size: 0.58rem; font-weight: 700; color: #fff; padding: 0.05rem 0.4rem; border-radius: 3px;
+  font-size: 0.58rem; font-weight: 700; color: var(--text-weak); padding: 0.05rem 0.4rem; border-radius: 3px;
   text-transform: uppercase; letter-spacing: 0.03em; flex: none;
 }
 .duallist__add { display: inline-flex; color: var(--brand); flex: none; }
