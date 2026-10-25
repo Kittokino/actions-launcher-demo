@@ -358,13 +358,15 @@
       const query = this.input.value.trim();
       this.dropdown.innerHTML = "";
       this.flatResults = [];
-      this.dropdown.appendChild(this.renderChips());
 
       if (!query) {
+        // Empty state shows recents only; the category chips appear once the rep types.
+        // Reset the filter so a leftover category can never hide recent actions.
+        this.categoryFilter = "all";
         // Empty state: recents (Salesforce global-search pattern).
         const recents = state.recents
           .map(actionById)
-          .filter((a) => a && (this.categoryFilter === "all" || a.category === this.categoryFilter));
+          .filter((a) => a);
         if (recents.length) {
           this.dropdown.appendChild(this.sectionTitle(ICONS.clock + " Recent"));
           for (const a of recents) {
@@ -381,6 +383,8 @@
         return;
       }
 
+      // Category chips only appear once there is a query to filter.
+      this.dropdown.appendChild(this.renderChips());
       const { direct, related } = searchActions(query, this.categoryFilter);
 
       if (direct.length) {
