@@ -870,7 +870,7 @@
           '<button data-menu="merge">Find duplicate contacts</button>' +
         "</div>" +
         '<div class="profile-card__header">' +
-          '<div class="profile-card__avatar">' + ICONS.person + "</div>" +
+          '<div class="profile-card__avatar"><img src="assets/customer-avatar.png" alt="' + escapeHtml(p.fullName) + '" /></div>' +
           '<div class="profile-card__headmain">' +
             '<div class="profile-card__badges">' +
               p.badges.map((b) => '<span class="profile-badge profile-badge--' + b.kind + '">' + escapeHtml(b.label) + "</span>").join("") +

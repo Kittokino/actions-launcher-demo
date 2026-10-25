@@ -163,8 +163,8 @@ const CUSTOMER_PROFILE = {
   nickname: "Sarah",
   pronouns: "She, her, hers",
   badges: [
-    { label: "Pro-Member", kind: "pro" },
-    { label: "🎂 Birthday today", kind: "muted" },
+    { label: "Pro", kind: "pro" },
+    { label: "Birthday today", kind: "muted" },
   ],
   phone: "+1 (987) 654-3210",
   email: "sari.tsering@email.com",
