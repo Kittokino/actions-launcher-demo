@@ -536,6 +536,10 @@ kbd {
   margin-bottom: 12px;   /* more breathing room before the suggested buttons */
 }
 .pinned-strip__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+/* Normal pins: one row, no wrapping. Overflow is handled in JS (pins that don't fit move to the caret). */
+.pinned-strip__actions--single { flex-wrap: nowrap; min-width: 0; }
+.pinned-strip__actions--single .pin-chip { flex: 0 0 auto; }
+.pinned-strip__actions--single .pin-overflow { flex: 0 0 auto; }
 
 /* Autofill trigger */
 .autofill-btn {

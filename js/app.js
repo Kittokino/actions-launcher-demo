@@ -473,11 +473,12 @@
       this.pinnedStrip.appendChild(controls);
 
       /* ----- Actions row: Einstein actions (when active) or the rep's pins ----- */
-      const actionsRow = document.createElement("div");
-      actionsRow.className = "pinned-strip__actions";
-
       const showingAI = ai.enabled && ai.active;
-      const chipIds = showingAI ? selectedAIActionIds() : [...state.pinned];
+      const chipIds = (showingAI ? selectedAIActionIds() : [...state.pinned]).slice(0, MAX_PINS);
+
+      const actionsRow = document.createElement("div");
+      // Normal pins live on a single non-wrapping row; AI suggestions may wrap.
+      actionsRow.className = "pinned-strip__actions" + (showingAI ? "" : " pinned-strip__actions--single");
 
       if (!chipIds.length) {
         const hint = document.createElement("span");
@@ -488,6 +489,7 @@
         actionsRow.appendChild(hint);
       }
 
+      const chipEls = [];
       for (const id of chipIds) {
         const action = actionById(id);
         if (!action) continue;
@@ -498,11 +500,16 @@
         chip.querySelector(".pin-chip__name").textContent = action.name;
         chip.addEventListener("click", () => launchAction(id, this.viewId));
         actionsRow.appendChild(chip);
+        chipEls.push({ id, el: chip });
       }
 
-      // Overflow: preserved pins (when Einstein is active) or recents (otherwise).
-      actionsRow.appendChild(this.buildOverflow(showingAI));
+      // Overflow caret: preserved pins (Einstein active) or pins that don't fit the row (otherwise).
+      const overflow = this.buildOverflow(showingAI);
+      actionsRow.appendChild(overflow);
       this.pinnedStrip.appendChild(actionsRow);
+
+      // Normal pins: fit as many as the width allows on one row, move the rest into the caret menu.
+      if (!showingAI) this.layoutPinRow(actionsRow, chipEls, overflow);
 
       // "Show pinned actions" sits below the suggested buttons — a fixed spot regardless of how they wrap.
       if (showingAI) {
@@ -524,7 +531,8 @@
       const btn = document.createElement("button");
       btn.className = "pin-overflow__btn";
       btn.innerHTML = ICONS.chevron;
-      btn.title = showingAI ? "Your pinned actions (kept)" : "Recent actions";
+      btn.title = showingAI ? "Your pinned actions (kept)" : "More pinned actions";
+      btn.setAttribute("aria-label", btn.title);
       btn.addEventListener("click", (e) => { e.stopPropagation(); this.overflowOpen = !this.overflowOpen; this.renderPins(); });
       wrap.appendChild(btn);
 
@@ -539,19 +547,13 @@
         } else {
           menu.appendChild(overflowNote("You have no pinned actions."));
         }
-      } else {
-        menu.appendChild(overflowHeader("Recent actions"));
-        if (state.recents.length) {
-          state.recents.forEach((id) => menu.appendChild(this.overflowItem(id)));
-        } else {
-          menu.appendChild(overflowNote("No recent actions yet."));
-        }
+        const divider = document.createElement("div");
+        divider.className = "pin-overflow__divider";
+        menu.appendChild(divider);
       }
+      // Normal mode: any pins that don't fit the row are injected above the Edit entry by layoutPinRow.
 
       // Manage pins entry point (dual-listbox editor).
-      const divider = document.createElement("div");
-      divider.className = "pin-overflow__divider";
-      menu.appendChild(divider);
       const edit = document.createElement("button");
       edit.className = "pin-overflow__item pin-overflow__edit";
       edit.innerHTML = '<span class="pin-overflow__ico">' + ICONS.pin + "</span><span>Edit pinned actions…</span>";
@@ -560,6 +562,42 @@
 
       wrap.appendChild(menu);
       return wrap;
+    }
+
+    // Single-row pins: keep as many inline as the row width allows, push the rest into the caret menu.
+    // Re-runs on every render (and on window resize), so a wider display reveals more buttons automatically.
+    layoutPinRow(actionsRow, chipEls, overflow) {
+      const menu = overflow.querySelector(".pin-overflow__menu");
+      const editBtn = menu.querySelector(".pin-overflow__edit");
+      const cs = getComputedStyle(actionsRow);
+      const gap = parseFloat(cs.columnGap || cs.gap) || 10;
+      const available = actionsRow.clientWidth;
+      const caretW = overflow.offsetWidth; // caret stays on the row, so reserve its width
+
+      let used = 0;
+      let overflowing = false;
+      const overflowIds = [];
+      for (const { id, el } of chipEls) {
+        const next = used + (used ? gap : 0) + el.offsetWidth;
+        // Reserve room for the caret (plus a gap) so it never gets pushed off the row.
+        if (!overflowing && next + gap + caretW <= available) {
+          used = next;
+        } else {
+          overflowing = true;
+          el.remove();
+          overflowIds.push(id);
+        }
+      }
+
+      if (overflowIds.length) {
+        const frag = document.createDocumentFragment();
+        frag.appendChild(overflowHeader("More pinned actions"));
+        overflowIds.forEach((id) => frag.appendChild(this.overflowItem(id)));
+        const divider = document.createElement("div");
+        divider.className = "pin-overflow__divider";
+        frag.appendChild(divider);
+        menu.insertBefore(frag, editBtn);
+      }
     }
 
     overflowItem(id) {
@@ -664,7 +702,7 @@
   }
 
   /* ---------------- Pin editor (dual-listbox modal) ---------------- */
-  const MAX_PINS = 10;
+  const MAX_PINS = 6;
 
   function openPinEditor() {
     let working = state.pinned.slice(); // edit a working copy; Cancel discards
@@ -1248,4 +1286,11 @@
   const caseTab = document.querySelector('.console-nav__tab[data-nav="case"]');
   if (caseSub) caseSub.textContent = CASE_RECORD.subject.slice(0, 15).trimEnd() + "…";
   if (caseTab) caseTab.title = CASE_RECORD.subject;
+
+  // Re-flow the single-row pins when the viewport changes: a wider display reveals more pins inline.
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => refreshLaunchers(), 120);
+  });
 })();
