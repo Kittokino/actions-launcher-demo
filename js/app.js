@@ -1181,8 +1181,8 @@
   document.addEventListener("keydown", (e) => {
     const el = document.activeElement;
     const inField = !!el && (/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName) || el.isContentEditable);
-    if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === "k" || e.key.toLowerCase() === "h")) {
-      // Ctrl/Cmd+K and Ctrl/Cmd+H both focus the search field (preventDefault also suppresses Ctrl+H history).
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+      // Ctrl/Cmd+K focuses the search field.
       e.preventDefault();
       focusActiveLauncher();
     } else if (e.key === "/" && !inField) {
