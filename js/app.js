@@ -260,6 +260,18 @@
         if (this.overflowOpen && !this.pinnedStrip.contains(e.target)) { this.overflowOpen = false; this.renderPins(); }
       });
 
+      // Re-fit the single-row pins whenever the strip's own width changes: window resize,
+      // window restore, subtab show/hide, chat collapse. ResizeObserver catches them all.
+      // The strip width is set by the column (not by the chips), so trimming never re-triggers this.
+      this._lastPinWidth = -1;
+      if (typeof ResizeObserver !== "undefined") {
+        this._ro = new ResizeObserver(() => {
+          const w = this.pinnedStrip.clientWidth;
+          if (w !== this._lastPinWidth) { this._lastPinWidth = w; this.renderPins(); }
+        });
+        this._ro.observe(this.pinnedStrip);
+      }
+
       this.renderPins();
       launchers.push(this);
     }
@@ -375,8 +387,11 @@
           }
         } else {
           const empty = document.createElement("div");
-          empty.className = "launcher-empty";
-          empty.textContent = "Type to search " + ACTIONS.length + " actions — e.g. “refund”, “roaming”, or “money back”.";
+          empty.className = "launcher-empty launcher-empty--illustration";
+          empty.innerHTML =
+            '<img class="launcher-empty__art" src="assets/search-empty-state.avif" alt="" />' +
+            '<div class="launcher-empty__title">Search for an action</div>' +
+            '<div class="launcher-empty__text">Type what you want to do, like “refund”, “roaming”, or “unlock device”.</div>';
           this.dropdown.appendChild(empty);
         }
         this.paintActive();
@@ -480,13 +495,18 @@
       // Normal pins live on a single non-wrapping row; AI suggestions may wrap.
       actionsRow.className = "pinned-strip__actions" + (showingAI ? "" : " pinned-strip__actions--single");
 
+      // In single-row mode the chips live in their own shrinkable, clipping track so they
+      // can never force the column wider; the caret sits outside the track.
+      const track = showingAI ? actionsRow : document.createElement("div");
+      if (!showingAI) { track.className = "pin-track"; actionsRow.appendChild(track); }
+
       if (!chipIds.length) {
         const hint = document.createElement("span");
         hint.className = "pinned-strip__none";
         hint.textContent = showingAI
           ? "Select an intent above to see matching actions."
           : "No pinned actions — pin from search results, or let Einstein suggest some.";
-        actionsRow.appendChild(hint);
+        track.appendChild(hint);
       }
 
       const chipEls = [];
@@ -499,7 +519,7 @@
         chip.innerHTML = '<span class="pin-chip__name"></span>';
         chip.querySelector(".pin-chip__name").textContent = action.name;
         chip.addEventListener("click", () => launchAction(id, this.viewId));
-        actionsRow.appendChild(chip);
+        track.appendChild(chip);
         chipEls.push({ id, el: chip });
       }
 
@@ -508,8 +528,8 @@
       actionsRow.appendChild(overflow);
       this.pinnedStrip.appendChild(actionsRow);
 
-      // Normal pins: fit as many as the width allows on one row, move the rest into the caret menu.
-      if (!showingAI) this.layoutPinRow(actionsRow, chipEls, overflow);
+      // Normal pins: fit as many as the track's width allows, move the rest into the caret menu.
+      if (!showingAI) this.layoutPinRow(track, chipEls, overflow);
 
       // "Show pinned actions" sits below the suggested buttons — a fixed spot regardless of how they wrap.
       if (showingAI) {
@@ -564,23 +584,27 @@
       return wrap;
     }
 
-    // Single-row pins: keep as many inline as the row width allows, push the rest into the caret menu.
-    // Re-runs on every render (and on window resize), so a wider display reveals more buttons automatically.
-    layoutPinRow(actionsRow, chipEls, overflow) {
+    // Single-row pins: keep as many inline as the track's width allows, push the rest into the caret menu.
+    // The track is flex-shrinkable with overflow:hidden, so its clientWidth is the real space the
+    // column grants (never inflated by the chips). Re-runs on every render and on ResizeObserver ticks,
+    // so a wider display reveals more buttons automatically.
+    layoutPinRow(track, chipEls, overflow) {
+      const available = track.clientWidth;
+      // When the pane is hidden (display:none) the width reads 0 — leave every pin inline and
+      // let the ResizeObserver re-fit once the pane becomes visible.
+      if (available <= 0) return;
+
       const menu = overflow.querySelector(".pin-overflow__menu");
       const editBtn = menu.querySelector(".pin-overflow__edit");
-      const cs = getComputedStyle(actionsRow);
+      const cs = getComputedStyle(track);
       const gap = parseFloat(cs.columnGap || cs.gap) || 10;
-      const available = actionsRow.clientWidth;
-      const caretW = overflow.offsetWidth; // caret stays on the row, so reserve its width
 
       let used = 0;
       let overflowing = false;
       const overflowIds = [];
       for (const { id, el } of chipEls) {
         const next = used + (used ? gap : 0) + el.offsetWidth;
-        // Reserve room for the caret (plus a gap) so it never gets pushed off the row.
-        if (!overflowing && next + gap + caretW <= available) {
+        if (!overflowing && next <= available) {
           used = next;
         } else {
           overflowing = true;
@@ -604,8 +628,9 @@
       const action = actionById(id);
       const item = document.createElement("button");
       item.className = "pin-overflow__item";
-      item.innerHTML = '<span class="pin-overflow__ico">' + ICONS[action.category] + "</span><span></span>";
-      item.querySelector("span:nth-child(2)").textContent = action.name;
+      // No category icon here — the label alone matches how the pinned buttons read.
+      item.innerHTML = "<span></span>";
+      item.querySelector("span").textContent = action.name;
       item.addEventListener("click", () => { this.overflowOpen = false; launchAction(id, this.viewId); });
       return item;
     }
@@ -1287,10 +1312,11 @@
   if (caseSub) caseSub.textContent = CASE_RECORD.subject.slice(0, 15).trimEnd() + "…";
   if (caseTab) caseTab.title = CASE_RECORD.subject;
 
-  // Re-flow the single-row pins when the viewport changes: a wider display reveals more pins inline.
-  let resizeTimer;
+  // Belt-and-suspenders with the per-launcher ResizeObserver: a window resize (including
+  // maximize/restore) re-fits the single-row pins even if an observer notification is missed.
+  let pinResizeTimer;
   window.addEventListener("resize", () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => refreshLaunchers(), 120);
+    clearTimeout(pinResizeTimer);
+    pinResizeTimer = setTimeout(() => refreshLaunchers(), 120);
   });
 })();

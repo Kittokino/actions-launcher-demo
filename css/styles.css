@@ -505,6 +505,17 @@ kbd {
   color: var(--text-weak);
   text-align: center;
 }
+/* First-run empty state: SLDS-style illustration with a short heading and helper line. */
+.launcher-empty--illustration {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 1.5rem 1rem 1.75rem;
+}
+.launcher-empty__art { width: 160px; height: auto; margin-bottom: 0.5rem; }
+.launcher-empty__title { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+.launcher-empty__text { max-width: 320px; line-height: 1.5; color: var(--text-weak); }
 
 /* ---------- Einstein toggle (card header) ---------- */
 .einstein-toggle {
@@ -536,9 +547,15 @@ kbd {
   margin-bottom: 12px;   /* more breathing room before the suggested buttons */
 }
 .pinned-strip__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-/* Normal pins: one row, no wrapping. Overflow is handled in JS (pins that don't fit move to the caret). */
+/* Normal pins: one row. The chip track shrinks and clips (overflow handled in JS: pins that
+   don't fit move to the caret), while the caret sits outside the track. Because the track can
+   shrink to zero, the pins can never force the column wider than the layout allows. */
 .pinned-strip__actions--single { flex-wrap: nowrap; min-width: 0; }
-.pinned-strip__actions--single .pin-chip { flex: 0 0 auto; }
+.pinned-strip__actions--single .pin-track {
+  display: flex; align-items: center; gap: 10px;
+  flex: 0 1 auto; min-width: 0; overflow: hidden;
+}
+.pinned-strip__actions--single .pin-track .pin-chip { flex: 0 0 auto; }
 .pinned-strip__actions--single .pin-overflow { flex: 0 0 auto; }
 
 /* Autofill trigger */
@@ -1001,7 +1018,9 @@ kbd {
 
 /* Narrow-viewport fallback: stack record columns, slim the chat panel */
 @media (max-width: 1100px) {
-  .record-columns, .record-columns-inner { flex-direction: column; }
+  /* Stacked columns must stretch to the full width rather than shrink to their content;
+     otherwise the single-row pins size the column to their own width and inflate the layout. */
+  .record-columns, .record-columns-inner { flex-direction: column; align-items: stretch; }
   .record-col-profile { flex: none; }
   .chat-panel { width: 300px; }
   .app-header__search-hint { display: none; }
