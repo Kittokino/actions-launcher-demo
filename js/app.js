@@ -1177,13 +1177,21 @@
 
   /* ---------------- Global keyboard ---------------- */
   document.addEventListener("keydown", (e) => {
-    const inField = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
+    const el = document.activeElement;
+    const inField = !!el && (/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName) || el.isContentEditable);
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
       e.preventDefault();
       focusActiveLauncher();
     } else if (e.key === "/" && !inField) {
       e.preventDefault();
       focusActiveLauncher();
+    } else if ((e.key === "h" || e.key === "H") && (e.ctrlKey || e.shiftKey) && !e.metaKey && !e.altKey) {
+      // Presenter cue: Ctrl+H or Shift+H toggles a pulsing ring on the Actions Launcher.
+      if (inField) return;
+      e.preventDefault(); // suppress Ctrl+H (browser history)
+      document.querySelectorAll(".launcher-card").forEach((c) => c.classList.toggle("highlight-pulse"));
+    } else if (e.key === "Escape") {
+      document.querySelectorAll(".launcher-card.highlight-pulse").forEach((c) => c.classList.remove("highlight-pulse"));
     }
   });
 
@@ -1219,6 +1227,13 @@
   document.querySelectorAll(".app-header__icon-btn[data-toast]").forEach((btn) => {
     btn.addEventListener("click", () => toast(btn.dataset.toast));
   });
+
+  // Collapsible live-chat panel (CSR view): collapse button hides it, handle restores it.
+  const workspaceEl = document.querySelector(".workspace");
+  const chatCollapseBtn = document.getElementById("chat-collapse");
+  const chatHandleBtn = document.getElementById("chat-handle");
+  if (chatCollapseBtn) chatCollapseBtn.addEventListener("click", () => workspaceEl.classList.add("chat-collapsed"));
+  if (chatHandleBtn) chatHandleBtn.addEventListener("click", () => workspaceEl.classList.remove("chat-collapsed"));
 
   // Case tab subtitle = the actual case title, truncated to 15 chars.
   // The full title tooltip lives on the whole tab so it shows anywhere within the tab.

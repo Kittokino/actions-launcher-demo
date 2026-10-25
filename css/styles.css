@@ -138,6 +138,7 @@ kbd {
   display: flex;
   flex: 1;
   min-height: 0;
+  position: relative;
 }
 .workspace__views {
   flex: 1;
@@ -381,6 +382,27 @@ kbd {
 
 /* ---------- Actions Launcher ---------- */
 .launcher-card .detail-card__header svg { color: var(--brand); }
+
+/* Presenter cue: gentle pulsing ring, matched to the Embedded AI (SLDS2) project.
+   Toggled with Ctrl+H or Shift+H; Esc clears it. */
+@keyframes launcher-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 3px #066afe, 0 0 12px 2px rgba(6, 106, 254, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 5px #066afe, 0 0 20px 5px rgba(6, 106, 254, 0.55);
+  }
+}
+.launcher-card.highlight-pulse {
+  border-radius: 8px;
+  animation: launcher-pulse 1.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .launcher-card.highlight-pulse {
+    animation: none;
+    box-shadow: 0 0 0 4px #066afe, 0 0 16px 4px rgba(6, 106, 254, 0.45);
+  }
+}
 
 .launcher-search { position: relative; }
 .launcher-search__icon {
@@ -738,17 +760,42 @@ kbd {
 /* ---------- Chat panel ---------- */
 .chat-panel {
   width: 340px;
-  flex: none;
+  flex: none; min-width: 0;
   display: flex;
   flex-direction: column;
   background: var(--surface);
   border-left: 1px solid var(--border);
+  transition: width 0.25s ease;
 }
+/* Collapsed: slide the panel closed so the console fills the width (CSR view) */
+.workspace.chat-collapsed .chat-panel { width: 0; border-left-width: 0; overflow: hidden; }
 .chat-panel__header {
   display: flex; align-items: center; gap: 0.6rem;
   padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--border);
 }
+.chat-panel__collapse {
+  margin-left: auto; flex: none; padding: 0;
+  width: 26px; height: 26px; border-radius: 50%;
+  border: none; background: transparent; cursor: pointer; color: var(--text-weak);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.chat-panel__collapse:hover { background: #f0f0f0; color: var(--text); }
+.chat-panel__collapse svg { width: 18px; height: 18px; }
+/* Restore handle, visible only when the chat panel is collapsed */
+.chat-handle {
+  position: absolute; top: 9px; right: 0;
+  display: none; align-items: center; justify-content: center;
+  width: 22px; height: 44px; padding: 0; z-index: 5;
+  background: var(--surface); color: var(--text-weak);
+  border: 1px solid var(--border); border-right: none;
+  border-radius: 8px 0 0 8px;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+.workspace.chat-collapsed .chat-handle { display: inline-flex; }
+.chat-handle:hover { color: var(--brand); background: #f6f9fd; }
+.chat-handle svg { width: 16px; height: 16px; }
 .chat-panel__status-dot {
   width: 10px; height: 10px; border-radius: 50%;
   background: #3ba755; flex: none;

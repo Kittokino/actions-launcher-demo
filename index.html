@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- deploy-pipeline-check 2026-10-25 (harmless marker; safe to remove) -->
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -79,6 +78,9 @@
           <div class="chat-panel__title">Live Chat — Sari Tsering</div>
           <div class="chat-panel__subtitle">Web chat · started 2:14 PM</div>
         </div>
+        <button class="chat-panel__collapse" id="chat-collapse" title="Collapse chat" aria-label="Collapse chat panel">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+        </button>
       </div>
       <div class="chat-panel__messages" id="chat-messages" aria-live="polite"></div>
       <div class="chat-panel__controls">
@@ -93,6 +95,10 @@
         </button>
       </div>
     </aside>
+
+    <button class="chat-handle" id="chat-handle" title="Show live chat" aria-label="Show live chat panel">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 6 15.41 7.41 10.83 12l4.58 4.59L14 18l-6-6z"/></svg>
+    </button>
   </main>
 
   <!-- Persistent utility bar (footer) -->
