@@ -322,7 +322,8 @@
       row.innerHTML =
         '<span class="launcher-result__icon" style="background:' + cat.color + '">' + ICONS[action.category] + "</span>" +
         '<span class="launcher-result__text">' +
-          '<div class="launcher-result__name">' + (query ? highlightName(action.name, query) : escapeHtml(action.name)) + "</div>" +
+          '<div class="launcher-result__name">' + (query ? highlightName(action.name, query) : escapeHtml(action.name)) +
+            (action.pro ? ' <span class="pro-badge">Pro</span>' : "") + "</div>" +
           '<div class="launcher-result__desc">' + escapeHtml(action.description) + "</div>" +
           (matchedTerm ? '<div class="launcher-result__matched">↳ matched “' + escapeHtml(matchedTerm) + '”</div>' : "") +
         "</span>" +
@@ -615,7 +616,6 @@
 
       if (overflowIds.length) {
         const frag = document.createDocumentFragment();
-        frag.appendChild(overflowHeader("More pinned actions"));
         overflowIds.forEach((id) => frag.appendChild(this.overflowItem(id)));
         const divider = document.createElement("div");
         divider.className = "pin-overflow__divider";
@@ -727,7 +727,7 @@
   }
 
   /* ---------------- Pin editor (dual-listbox modal) ---------------- */
-  const MAX_PINS = 6;
+  const MAX_PINS = 10;
 
   function openPinEditor() {
     let working = state.pinned.slice(); // edit a working copy; Cancel discards
@@ -774,7 +774,8 @@
 
     // Soft tinted pill, single gray label; no category icon (keeps the editor calm and matches the overflow menu).
     const badge = (a) => '<span class="cat-badge" style="background:' + CATEGORIES[a.category].tint + '">' + CATEGORIES[a.category].label + "</span>";
-    const rowMain = (a) => '<span class="duallist__row-main"><span class="duallist__name">' + escapeHtml(a.name) + "</span>" + badge(a) + "</span>";
+    const proBadge = (a) => a.pro ? '<span class="pro-badge">Pro</span>' : "";
+    const rowMain = (a) => '<span class="duallist__row-main"><span class="duallist__name">' + escapeHtml(a.name) + "</span>" + badge(a) + proBadge(a) + "</span>";
 
     function renderAvail() {
       const f = filter.trim().toLowerCase();

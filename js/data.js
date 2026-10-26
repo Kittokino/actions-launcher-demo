@@ -54,6 +54,9 @@ const ACTIONS = [
   { id: "apply-credit", name: "Apply Account Credit", category: "billing",
     description: "Add a goodwill or promotional credit to the account.",
     synonyms: ["goodwill", "compensation", "discount", "courtesy credit"] },
+  { id: "waive-roaming-overage", name: "Waive Roaming Overage", category: "billing",
+    description: "Remove roaming overage charges from the current bill.",
+    synonyms: ["waive roaming", "roaming overage", "remove roaming charges", "roaming credit", "overage waiver", "high roaming bill"] },
   { id: "update-payment-method", name: "Update Payment Method", category: "billing",
     description: "Change the card or bank account used for payments.",
     synonyms: ["new card", "autopay", "bank details", "billing info", "direct debit"] },
@@ -112,6 +115,9 @@ const ACTIONS = [
   { id: "unlock-device", name: "Unlock Device", category: "devices",
     description: "Request a carrier unlock for the device.",
     synonyms: ["carrier unlock", "use other sim", "network unlock"] },
+  { id: "manage-roaming", name: "Manage Data Roaming", category: "devices", pro: true,
+    description: "Turn data roaming on or off and set a usage cap for the line while traveling.",
+    synonyms: ["data roaming", "roaming network", "visited network", "roaming threshold", "roaming limit", "stop roaming charges", "international data", "overseas data", "travel data", "high bill roaming"] },
 
   // ---- Network ----
   { id: "report-outage", name: "Report Network Outage", category: "network",
@@ -126,12 +132,12 @@ const ACTIONS = [
   { id: "wifi-calling", name: "Enable WiFi Calling", category: "network",
     description: "Turn on WiFi calling for the line.",
     synonyms: ["wifi calls", "call over wifi", "bad indoor signal"] },
-  { id: "escalate-network", name: "Escalate to Network Team", category: "network",
+  { id: "escalate-network", name: "Escalate to Network Team", category: "network", pro: true,
     description: "Create an escalation ticket for network engineering.",
     synonyms: ["escalation", "tier 2", "technical team", "persistent issue"] },
 ];
 
-const DEFAULT_PINS = ["explain-bill", "change-plan", "activate-sim", "report-outage"];
+const DEFAULT_PINS = ["explain-bill", "change-plan", "activate-sim", "report-outage", "add-roaming-pack"];
 
 const CUSTOMER = {
   name: "Sari Tsering",

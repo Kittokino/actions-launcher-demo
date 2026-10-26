@@ -711,6 +711,12 @@ kbd {
   font-size: 0.58rem; font-weight: 500; color: var(--text-weak); padding: 0.05rem 0.4rem; border-radius: 3px;
   text-transform: uppercase; letter-spacing: 0.03em; flex: none;
 }
+/* Pro-tier marker: solid magenta matching the customer's profile Pro badge, same shape as the category pill. */
+.pro-badge {
+  font-size: 0.58rem; font-weight: 500; color: #fff; background: #b4207f;
+  padding: 0.05rem 0.4rem; border-radius: 3px;
+  text-transform: uppercase; letter-spacing: 0.03em; flex: none; white-space: nowrap;
+}
 .duallist__add { display: inline-flex; color: var(--brand); flex: none; }
 .duallist__add svg { width: 16px; height: 16px; }
 .duallist__row:disabled .duallist__add { color: var(--text-weak); }
