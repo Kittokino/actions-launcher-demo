@@ -710,6 +710,7 @@
     state.ai.enabled = on;
     if (!on) { state.ai.active = false; state.ai.loading = false; state.ai.intents = []; }
     refreshLaunchers();
+    syncEinsteinAssist();
   }
 
   function overflowHeader(text) {
@@ -853,6 +854,13 @@
 
   /* ---------------- Chat panel ---------------- */
   const chatMessages = document.getElementById("chat-messages");
+  const chatAssist = document.getElementById("chat-assist");
+  // Ambient note that Einstein is working alongside the rep; shown only while suggestions are on.
+  function syncEinsteinAssist() {
+    if (!chatAssist) return;
+    if (!chatAssist.innerHTML) chatAssist.innerHTML = '<span class="chat-panel__assist-label">Note:</span> Einstein is assisting with this conversation';
+    chatAssist.hidden = !state.ai.enabled;
+  }
   const chatNextBtn = document.getElementById("chat-next");
   const chatAutoplayBtn = document.getElementById("chat-autoplay");
   const chatRestartBtn = document.getElementById("chat-restart");
@@ -1284,6 +1292,7 @@
   activateSubtab("case", "record");
   setNav("customer");
   renderChat();
+  syncEinsteinAssist();
 
   // Utility bar (persistent footer) — each item surfaces its toast.
   document.querySelectorAll(".utility-item[data-toast]").forEach((btn) => {

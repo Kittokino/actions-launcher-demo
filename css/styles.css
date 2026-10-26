@@ -799,6 +799,13 @@ kbd {
   padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--border);
 }
+/* Ambient "Einstein is assisting" note under the chat subtitle (shown only while suggestions are on). */
+.chat-panel__assist {
+  margin-top: 3px;
+  font-size: 0.72rem; color: var(--text-weak); line-height: 1.35;
+}
+.chat-panel__assist[hidden] { display: none; }
+.chat-panel__assist-label { font-weight: 600; }
 .chat-panel__collapse {
   margin-left: auto; flex: none; padding: 0;
   width: 26px; height: 26px; border-radius: 50%;
